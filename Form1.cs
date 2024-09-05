@@ -19,7 +19,7 @@ namespace WH_LangChange
             // Bing AI answer: simple cmd execute
             Process myProc = new Process();
             myProc.StartInfo.FileName = "cmd.exe";
-            myProc.StartInfo.Arguments = "/C dir";
+            myProc.StartInfo.Arguments = "/C winver";
             myProc.StartInfo.RedirectStandardOutput = true;
             myProc.StartInfo.UseShellExecute = false;
             myProc.StartInfo.CreateNoWindow = true;
