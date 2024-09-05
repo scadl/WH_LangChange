@@ -44,8 +44,10 @@ namespace WH_LangChange
             //listBox1.Items.AddRange(langLines);
             //listBox2.Items.AddRange(cmdOut.Split(Environment.NewLine));
 
+            LangDicStor langDicStor = new LangDicStor();
+
             RegistryKey key = Registry.LocalMachine.OpenSubKey(@"SYSTEM\CurrentControlSet\Control\Nls\Language", true);
-            textBox2.Text = key.GetValue("Default").ToString();
+            textBox2.Text = langDicStor.GetLang(key.GetValue("Default").ToString());
 
             textBox3.Text = cmdOut;
 

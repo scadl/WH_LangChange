@@ -9,4 +9,8 @@
     <ApplicationManifest>app.manifest</ApplicationManifest>
   </PropertyGroup>
 
+  <ItemGroup>
+    <PackageReference Include="CsvHelper" Version="33.0.1" />
+  </ItemGroup>
+
 </Project>
