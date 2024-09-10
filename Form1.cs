@@ -78,17 +78,16 @@ namespace WH_LangChange
             //listBox2.Items.AddRange(cmdOut.Split(Environment.NewLine));
 
             LangDicStor langDicStor = new LangDicStor();
+            Dictionary<string, string> langStor = langDicStor.GetFullList();
 
             // Registry processing in C# are simple: Open subKey (Tree Brunch), modify key, close subkey.
             // https://codingvision.net/c-edit-registry-keys-or-values
             RegistryKey key = Registry.LocalMachine.OpenSubKey(@"SYSTEM\CurrentControlSet\Control\Nls\Language", true);
-            textBox2.Text = langDicStor.GetLang(key.GetValue("Default").ToString());
-
-            
+            textBox2.Text = langStor["0x"+key.GetValue("Default").ToString()];            
 
             radioButton1.Enabled = true;
 
-            foreach (var lang in langDicStor.GetFullList())
+            foreach (var lang in langStor)
             {
                 comboBox1.Items.Add(lang.Value);
             }
@@ -118,13 +117,21 @@ namespace WH_LangChange
 
         private void button3_Click(object sender, EventArgs e)
         {
-            var confirmAct = MessageBox.Show("You are about to change you computer registry values. On your windows edition, there is no way to roll back this action; " +
-                "only overwrite either with this, or similar app./n/n Are you saved all your opened docs and ready to apply this path and reboot?", "Are yo ready to patch yor system?", 
+            var confirmAct = MessageBox.Show("Warning! \nYou are about to change you computer registry values. \n\nOn your windows edition, there is no way to roll back this action! " +
+                "The only way to turn everything back, is either using this app or edit you registry manually. \n\nAre you saved all your opened docs and ready to apply this path and reboot?", "Are yo ready to patch yor system?", 
                 MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
             if (confirmAct == DialogResult.Yes)
             {
 
-                string tgCode = listBox1.SelectedItem.ToString();
+                string tgCode = "en-US";
+                LangDicStor langDicStor = new LangDicStor();
+                Dictionary<string, string> langStor = langDicStor.GetFullList();
+                foreach (var lang in langStor)
+                {
+                    if (lang.Value == listBox1.SelectedItem.ToString()) {
+                        tgCode = lang.Key.Remove(0,2);
+                    }
+                }
 
                 RegistryKey keyNew = Registry.LocalMachine.OpenSubKey(@"SYSTEM\CurrentControlSet\Control\Nls\Language", true);
                 keyNew.SetValue("Default", tgCode);
@@ -151,10 +158,12 @@ namespace WH_LangChange
             if (comboBox1.SelectedIndex >= 0)
             {
                 button2.Text = "Plaese wait ...";
+                System.Threading.Thread.Sleep(500);
                 ExecudeCommand("powershell Install-Language -Language "+comboBox1.Text);
-                RefreshLngList(false);
-                //MessageBox.Show("powershell Install-Language -Language " + comboBox1.Text, "Info", MessageBoxButtons.OK);
+                RefreshLngList(false);                
                 button2.Text = "Install Done!";
+
+                //MessageBox.Show("powershell Install-Language -Language " + comboBox1.Text, "Info", MessageBoxButtons.OK);
             }
         }
     }

@@ -47,6 +47,9 @@ namespace WH_LangChange
 
         public LangDicStor()
         {
+        // Windows Langauge Code Table from Microsoft
+        https://learn.microsoft.com/en-us/openspecs/windows_protocols/ms-lcid/a9eac961-e77d-41a6-90a5-ce1a8b0cdb9c?redirectedfrom=MSDN
+
             // Assembly is used to extract CSV storage file from app's resocurces, and put into file stream
             // CSV processing is very striagforvard, if field of storage class a similar to first rown in csv
             // https://code-maze.com/csharp-read-data-from-csv-file/
@@ -72,7 +75,7 @@ namespace WH_LangChange
         }
 
         public string GetLang(string lang) {
-            return langDic["0x"+lang] ;
+            return langDic["0x"+lang];
         }
     }
 }
